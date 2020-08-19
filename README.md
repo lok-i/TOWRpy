@@ -22,7 +22,10 @@ the usage additional ROS packages.This is quite cumbersome and not very straight
    <img width="260" height="280" src="https://github.com/lok-i/towr_pybullet/blob/master/media/stairs.gif">
    <img width="260" height="280" src="https://github.com/lok-i/towr_pybullet/blob/master/media/turn.gif">
    <img width="260" height="280" src="https://github.com/lok-i/towr_pybullet/blob/master/media/trot.gif">
-    <i>Climbing Stairs(left), Turning about the axis(centre), Trotting to a given target(right) </i><br>
+</p>
+
+<p align = "center">
+<i>Climbing Stairs(left), Turning about the axis(centre), Trotting to a given target(right) </i><br>
 </p>
 
 **Note:**
