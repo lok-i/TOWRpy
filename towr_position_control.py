@@ -125,52 +125,38 @@ def ik_leg(anymal,leg_index,ee):
     	return(angles[9:12])
 
 
-def find_force(anymal,leg_index,f_tip,angles):
-	linear_jacob = p.calculateJacobian(anymal,(leg_index+1)*5,
-		                               [0,0,0],angles,
-		                               [0,0,0,0,0,0,0,0,0,0,0,0],
-		                               [0,0,0,0,0,0,0,0,0,0,0,0])[0]
-	
-	# 3 x 3
-	Jacob_without_base = np.array([linear_jacob[0][6+3*leg_index:9+3*leg_index],
-		                           linear_jacob[1][6+3*leg_index:9+3*leg_index],
-		                           linear_jacob[2][6+3*leg_index:9+3*leg_index]])
-				#print("Sliced:\n",Jacob_without_base)
-				#print("Transpose:\n",np.transpose(Jacob_without_base))
-	f_tip = np.array(f_tip)
-	# tau = J^T.f_tip
-	torque_calculated = np.dot(np.transpose(Jacob_without_base),f_tip)
-	return(torque_calculated)
-	
-				
-		#towr_traj[i].ee_force[0+3*j:3+3*j])
-		
-no_of_samples = 250
 
-horizon = 251
+		
+no_of_samples = 20
+
+horizon = no_of_samples +1
 float_array_3 = c_float*3
-init_base_pos = [0.45,0,0.54] #0.53 for stairs
+init_base_pos = [0,0,0.54] #0.53 for stairs
 init_base_quat = [0,0,0,1]
 
 target_pos = [1.9,0,0.54]
 target_angle = [0,0,0]
-kp = 100
-kd = 5
+
+kp = 5
+kd = 50
 log = 0
 coeff_fric = 0.85
-gait = 0
-log_name = "./videos/towr_stairs.mp4"
-save_log = False
 '''
-Working Combos, for target +- 1.5,0,0
-gait -1 , coeff = 0.8,no_of_samples = 30, without angle feed bak
-gait -1 , coeff = 0.7,no_of_samples = 20, with angle feed bak
-gait -0 , coeff = 0.7,no_of_samples = 20, with angle feed b50
-terrain: stairs, target[1.9,0,0.54],initial=[0.45]
-gait -0 , coeff = 0.85,no_of_sample = 250,w a fb
+  0                  FlatID,
+  2                  StairsID,
+'''
+terrain_id = 0
+'''
+overlap-walk -0
+fly trot - 1
+pace - 2
+bound - 3
+gallop - 4
+'''
 
-'''
-def run_towr_tracking(target_pos,target_angle,terrain_id,gait_pattern):
+
+
+def run_towr_tracking_position_control(target_pos,target_angle,terrain_id,gait_pattern):
 	current_base_pos = init_base_pos
 	current_base_ang = p.getEulerFromQuaternion(init_base_quat)
 	target_anymal = [target_pos[0],target_pos[1]+2,target_pos[2]]
@@ -188,9 +174,7 @@ def run_towr_tracking(target_pos,target_angle,terrain_id,gait_pattern):
 		step1 = p.createMultiBody(baseMass=0,baseCollisionShapeIndex = sh_colBox,
 		                    basePosition = [boxOrigin,1,boxHalfHeight],
 		                    baseOrientation=[0.0,0.0,0.0,1])
-		# step2 = p.createMultiBody(baseMass=0,baseCollisionShapeIndex = sh_final_col,
-		#           basePosition = [boxOrigin+0.5+boxHalfLength,0,boxHalfHeight + 2*boxHalfHeight],
-		#                     baseOrientation=[0.0,0.0,0.0,1])
+
 		step2 = p.createMultiBody(baseMass=0,baseCollisionShapeIndex = sh_final_col,
 		          basePosition = [boxOrigin+0.5+boxHalfLength,1,0.05 + 2*boxHalfHeight],
 		                    baseOrientation=[0.0,0.0,0.0,1])
@@ -217,14 +201,16 @@ def run_towr_tracking(target_pos,target_angle,terrain_id,gait_pattern):
 	if(save_log):
 		log = p.startStateLogging(loggingType=p.STATE_LOGGING_VIDEO_MP4,fileName=log_name)
 	reached_or_out_or_fallen = False
+
 	while(reached_or_out_or_fallen!=True):
-		#p.removeAllUserDebugItems()
+
 
 		#takes the current ee positions of anymal, to compute from that position
 		ee1=list(p.getLinkState(anymal,5)[0])
 		ee2=list(p.getLinkState(anymal,10)[0])
 		ee3=list(p.getLinkState(anymal,15)[0])
 		ee4=list(p.getLinkState(anymal,20)[0])
+
 		ee1[1] = ee1[1] - 2
 		ee2[1] = ee2[1] - 2
 		ee3[1] = ee3[1] - 2
@@ -232,42 +218,39 @@ def run_towr_tracking(target_pos,target_angle,terrain_id,gait_pattern):
 
 		##print("ee1:",ee1,"ee2:",ee2,"ee3:",ee3,"ee4:",ee4)
 		draw_frame(current_base_pos)
-		#start = time.time()
 		Result_traj = cal_towr_code(init_pos=current_base_pos,init_ang=current_base_ang,
 			                        target_pos=target_pos,target_angle=target_angle,
 			                        ee1=ee1,ee2=ee2,ee3=ee3,ee4=ee4,
 			                        terrain_id=terrain_id,gait_pattern=gait_pattern)
 
-		#end = time.time()
-		#print_traj2(Result_traj,no_of_samples)
-		#print("Trajectory_calculation_time:",end - start)
+
 		for towr_sample_index in range(horizon):
 			towr_quat = p.getQuaternionFromEuler(Result_traj[towr_sample_index].base_angular)
-			#p.resetBasePositionAndOrientation(vis_anymal,Result_traj[towr_sample_index].base_linear ,towr_quat)
+			p.resetBasePositionAndOrientation(vis_anymal,Result_traj[towr_sample_index].base_linear ,towr_quat)
 			
-			#a = p.getBasePositionAndOrientation(vis_anymal)[0]
-			# if towr_sample_index!= 0:
-			# 	p.addUserDebugLine(b,a,[1,0,0],3)
+			a = p.getBasePositionAndOrientation(vis_anymal)[0]
+			if towr_sample_index!= 0:
+				p.addUserDebugLine(b,a,[1,0,0],3)
 			angles = set_anymal(vis_anymal,Result_traj[towr_sample_index].base_linear ,towr_quat,
 				                           Result_traj[towr_sample_index].ee_linear[0:3],
 				                           Result_traj[towr_sample_index].ee_linear[3:6],
 										   Result_traj[towr_sample_index].ee_linear[6:9],
 				                           Result_traj[towr_sample_index].ee_linear[9:12])
-			#b = a
+			b = a
 			time.sleep(0.01)
 			p.stepSimulation()
 			for i in range(4):
 				
 				
-				# leg_state = p.getJointStates(anymal,[1+5*i,2+5*i,3+5*i])
+				leg_state = p.getJointStates(anymal,[1+5*i,2+5*i,3+5*i])
 
 	
-				# previous_angles = [leg_state[0][0],
-				# 				   leg_state[1][0],
-				# 				   leg_state[2][0]]
-				# previous_velocities = [leg_state[0][1],
-				# 				   	   leg_state[1][1],
-				# 				   	   leg_state[2][1]]
+				previous_angles = [leg_state[0][0],
+								   leg_state[1][0],
+								   leg_state[2][0]]
+				previous_velocities = [leg_state[0][1],
+								   	   leg_state[1][1],
+								   	   leg_state[2][1]]
 
 				#print("angles:",previous_angles,"vel:",previous_velocities)
 				if(i == 0):
@@ -279,39 +262,18 @@ def run_towr_tracking(target_pos,target_angle,terrain_id,gait_pattern):
 				elif(i == 3):
 					dezired_leg_angles = angles[9:12]
 				
-				# f_tip = Result_traj[towr_sample_index].ee_force[0+3*i:3+3*i]
-				# torques = find_force(vis_anymal,i,f_tip,angles)
-				# motor_torques = [0,0,0]
-
-				# for i in range(3):
-				# 	motor_torques[i] = kp*(dezired_leg_angles[i] - previous_angles[i]) + kd*(0 - previous_velocities[i]) 
-				#print("motor_torques:",motor_torques)
-				#if(len(p.getContactPoints(plane,vis_anymal,-1,5*(i+1)))==0):
-				#print("POSITION_CONTROL")
-				#if (towr_sample_index != 0):
+					
 				p.setJointMotorControlArray(bodyUniqueId=anymal,
 	                                		jointIndices = [1+5*i,2+5*i,3+5*i],
 	                                		controlMode=p.POSITION_CONTROL,
 	                                		targetPositions=dezired_leg_angles,
-	                                		targetVelocities=[0,0,0])
-				# else:
-				#print("TORQUE_CONTROL")
-				# p.setJointMotorControlArray(bodyUniqueId=anymal,
-	   #                              			jointIndices = [1+5*i,2+5*i,3+5*i],
-	   #                              			controlMode=p.TORQUE_CONTROL,
-	   #                              			forces=motor_torques)
-	 			
+	                                		targetVelocities=[0,0,0],)
+
 
 
 	    
 		current_base_anymal = p.getBasePositionAndOrientation(anymal)
-		'''
-		set_anymal(anymal,current_base_anymal[0],current_base_anymal[1], 
-		                                           [current_base_anymal[0][0]+0.34,current_base_anymal[0][1]+0.19,current_base_anymal[0][2]-0.42],
-											       [current_base_anymal[0][0]+0.34,current_base_anymal[0][1]-0.19,current_base_anymal[0][2]-0.42],
-    										       [current_base_anymal[0][0]-0.34,current_base_anymal[0][1]+0.19,current_base_anymal[0][2]-0.42],
-    										       [current_base_anymal[0][0]-0.34,current_base_anymal[0][1]-0.19,current_base_anymal[0][2]-0.42])
-		'''
+
 
 		if((abs(target_anymal[0])<abs(current_base_anymal[0][0]) 
 			and abs(target_anymal[1])<abs(current_base_anymal[0][1]) ) 
@@ -322,31 +284,14 @@ def run_towr_tracking(target_pos,target_angle,terrain_id,gait_pattern):
 			current_base_pos = [current_base_anymal[0][0],current_base_anymal[0][1]-2,current_base_anymal[0][2]]
 			current_base_ang = p.getEulerFromQuaternion(current_base_anymal[1])
 
-#for i in range(no_of_gaits):
-#print("Gait_type:",i)
-run_towr_tracking(target_pos,target_angle,terrain_id=2,gait_pattern=gait)
-#p.stopStateLogging(log)
-#if(save_log):
-'''
-p.connect(p.GUI)
-plane = p.loadURDF(os.path.join(pybullet_data.getDataPath(), "plane.urdf"), 0, 0, 0) #5,10,15,20
-p.setGravity(0,0,-10)
-anymal = p.loadURDF(file_path+"anymal_no_mass.urdf")
-angles=set_anymal(anymal,[init_base_pos[0],init_base_pos[1],init_base_pos[2]],init_base_quat, 
-		                                           [init_base_pos[0]+0.34,init_base_pos[1]+0.19,init_base_pos[2]-0.42],
-											       [init_base_pos[0]+0.34,init_base_pos[1]-0.19,init_base_pos[2]-0.42],
-    										       [init_base_pos[0]-0.34,init_base_pos[1]+0.19,init_base_pos[2]-0.42],
-    										       [init_base_pos[0]-0.34,init_base_pos[1]-0.19,init_base_pos[2]-0.42])
-while(True):
-	time.sleep(0.01)
 
-	f_tip = [0,0,-1000]
-	torques = find_force(anymal,0,f_tip,angles)
-	print("torques:",torques)
-	p.setJointMotorControlArray(bodyUniqueId=anymal,
-	                                 			jointIndices = [1,2,3],
-	                                 			controlMode=p.TORQUE_CONTROL,
-	                                 			targetPositions=[0,0,1.57],
-	                                 			forces=[0,0,-70])
-	p.stepSimulation()
-	'''
+
+gait = 1
+log_name = "./videos/readme_gif.mp4"
+save_log = True
+if __name__ == "__main__":
+	#for i in range(no_of_gaits):
+	#print("Gait_type:",i)
+	run_towr_tracking_position_control(target_pos,target_angle,terrain_id=terrain_id,gait_pattern=gait)
+	if(save_log):
+		p.stopStateLogging(log)
