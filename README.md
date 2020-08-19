@@ -1,4 +1,4 @@
-# PyTOWR
+# TOWRpy
 - a simulation test bed for TOWR trajectories in Pybullet
 
 ## Introduction:
