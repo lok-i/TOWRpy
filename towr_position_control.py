@@ -287,7 +287,7 @@ def run_towr_tracking_position_control(target_pos,target_angle,terrain_id,gait_p
 
 
 gait = 1
-log_name = "./videos/readme_gif.mp4"
+log_name = "./media/testFile.mp4"
 save_log = True
 if __name__ == "__main__":
 	#for i in range(no_of_gaits):
