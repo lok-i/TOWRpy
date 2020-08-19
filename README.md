@@ -16,12 +16,10 @@ TOWR(Trajectory Optimizer for Walking Robots), is a state of the art light-weigh
 TOWR is entirely developed in C++ and has inbuilt support to visualize the generated trajectories.However, there is no available code for using TOWR with a physics simulator.Their paper shows the validation of towr in Gazebo, which requires
 the usage additional ROS packages.This is quite cumbersome and not very straightforward for the robot learning community givent the ease that *Pybullet* provides us with.In the repo, we have built python functions to visualize aswell as simulate the TOWR generated trajectories on the robot platform ANYmal with different gait types and multiple terrains(flat ground and stairs as of now)
 
-## Current Features
+## Current Features:
 
 <p align="center">
-   <img width="500" height="400" src="https://github.com/lok-i/towr_pybullet/blob/master/media/stairs.gif">
-</p>
-<p align="center">
+   <img width="300" height="250" src="https://github.com/lok-i/towr_pybullet/blob/master/media/stairs.gif">
    <img width="300" height="250" src="https://github.com/lok-i/towr_pybullet/blob/master/media/turn.gif">
    <img width="300" height="250" src="https://github.com/lok-i/towr_pybullet/blob/master/media/trot.gif">
 </p>
