@@ -6,14 +6,28 @@ The software development of the robotics community is greatly biased towards the
 
 ## TOWR:
 <p align="center">
-   <img width="1280" height="798" src="https://github.com/lok-i/towr_pybullet/blob/master/media/towr.gif">
+   <img width="1280" height="698" src="https://github.com/lok-i/towr_pybullet/blob/master/media/towr.gif">
 </p>
 
 TOWR(Trajectory Optimizer for Walking Robots), is a state of the art light-weight and extensible C++ library for trajectory optimization for legged robots developed in ETH Zurich by Alexander Winkeler and his team.It proposes to address the problem of integrated motion planning as a non-linear optimization problem and there by provides a deasible kinematics solution.This framework is very versatile as address the robot's constraints (from its dynamic and kinematic model),the world constraints and the goal constraints.Having been tested across various terrain, robots,and gait types it also allows the users to import their own robot model or add custom constraints and terrain models.
 
 ## Our work:
+
 TOWR is entirely developed in C++ and has inbuilt support to visualize the generated trajectories.However, there is no available code for using TOWR with a physics simulator.Their paper shows the validation of towr in Gazebo, which requires
 the usage additional ROS packages.This is quite cumbersome and not very straightforward for the robot learning community givent the ease that *Pybullet* provides us with.In the repo, we have built python functions to visualize aswell as simulate the TOWR generated trajectories on the robot platform ANYmal with different gait types and multiple terrains(flat ground and stairs as of now)
+
+## Current Features
+## TOWR:
+<p align="center">
+   <img width="463" height="388" src="https://github.com/lok-i/towr_pybullet/blob/master/media/stairs.gif">
+</p>
+<p align="center">
+   <img width="262" height="224" src="https://github.com/lok-i/towr_pybullet/blob/master/media/turn.gif">
+</p>
+
+<p align="center">
+   <img width="293" height="203" src="https://github.com/lok-i/towr_pybullet/blob/master/media/trot.gif">
+</p>
 
 ## Ongoing Work:
 
