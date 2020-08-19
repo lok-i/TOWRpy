@@ -5,6 +5,10 @@
 The software development of the robotics community is greatly biased towards the usage of C++ and this is greatly justified by the speed that this language provides us with. However the growing field of *Robot Learning* requires faster prototyping and flexible simulation arrangments to incorprate various learning based frameworks.The arrival of modules like *Tensorflow,Pytorch,Stable Baselines* for learning and *Pybullet* for simulation has made *Python*, a very attractive choice for trainig and testing learning based agents in robots.This codebase is and attempt to build a pythonic wrapper arround *[TOWR - Trajectory Optimizer for Walking Robots](https://github.com/ethz-adrl/towr)*.
 
 ## TOWR:
+<p align="center">
+   <img width="1280" height="798" src="https://github.com/lok-i/towr_pybullet/blob/master/media/towr.gif">
+</p>
+
 TOWR(Trajectory Optimizer for Walking Robots), is a state of the art light-weight and extensible C++ library for trajectory optimization for legged robots developed in ETH Zurich by Alexander Winkeler and his team.It proposes to address the problem of integrated motion planning as a non-linear optimization problem and there by provides a deasible kinematics solution.This framework is very versatile as address the robot's constraints (from its dynamic and kinematic model),the world constraints and the goal constraints.Having been tested across various terrain, robots,and gait types it also allows the users to import their own robot model or add custom constraints and terrain models.
 
 ## Our work:
