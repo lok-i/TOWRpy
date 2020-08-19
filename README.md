@@ -1,6 +1,17 @@
 # TOWRpy
 - a simulation test bed for TOWR trajectories in Pybullet
 
+
+<p align="center">
+   <img width="260" height="280" src="https://github.com/lok-i/towr_pybullet/blob/master/media/stairs.gif">
+   <img width="260" height="280" src="https://github.com/lok-i/towr_pybullet/blob/master/media/turn.gif">
+   <img width="260" height="280" src="https://github.com/lok-i/towr_pybullet/blob/master/media/trot.gif">
+</p>
+
+<p align = "center">
+<i>Climbing Stairs(left), Turning about the axis(centre), Trotting to a given target(right) </i><br>
+</p>
+
 ## Introduction:
 The software development of the robotics community is greatly biased towards the usage of C++ and this is greatly justified by the speed that this language provides us with. However the growing field of *Robot Learning* requires faster prototyping and flexible simulation arrangments to incorprate various learning based frameworks.The arrival of modules like *Tensorflow,Pytorch,Stable Baselines* for learning and *Pybullet* for simulation has made *Python*, a very attractive choice for trainig and testing learning based agents in robots.This codebase is and attempt to build a pythonic wrapper arround *[TOWR - Trajectory Optimizer for Walking Robots](https://github.com/ethz-adrl/towr)*.
 
@@ -16,17 +27,6 @@ TOWR(Trajectory Optimizer for Walking Robots), is a state of the art light-weigh
 TOWR is entirely developed in C++ and has inbuilt support to visualize the generated trajectories.However, there is no available code for using TOWR with a physics simulator.Their paper shows the validation of towr in Gazebo, which requires
 the usage additional ROS packages.This is quite cumbersome and not very straightforward for the robot learning community givent the ease that *Pybullet* provides us with.In the repo, we have built python functions to visualize aswell as simulate the TOWR generated trajectories on the robot platform ANYmal with different gait types and multiple terrains(flat ground and stairs as of now)
 
-## Current Features:
-
-<p align="center">
-   <img width="260" height="280" src="https://github.com/lok-i/towr_pybullet/blob/master/media/stairs.gif">
-   <img width="260" height="280" src="https://github.com/lok-i/towr_pybullet/blob/master/media/turn.gif">
-   <img width="260" height="280" src="https://github.com/lok-i/towr_pybullet/blob/master/media/trot.gif">
-</p>
-
-<p align = "center">
-<i>Climbing Stairs(left), Turning about the axis(centre), Trotting to a given target(right) </i><br>
-</p>
 
 **Note:**
 
