@@ -30,10 +30,10 @@ the usage additional ROS packages.This is quite cumbersome and not very straight
 
 **Note:**
 
-* The Green Robot is a Visual robot that has no incorprated phyics but just act as a visual aid to display the ideal towr generated trajectories.
-* The Grey Robot is the real physical robot model in which the computed joint angles (corresponding to the towr trajectory) are applied.
-* In the above simulation, TOWR trajectories where recomputed until the real robot(grey) reaches the desired target takin the current position and orientation of the real robot as initial state.
-* The above results are pure **position control**, and the feet contact force given out by TOWR was not utilized yet.
+* The *Green Robot* is a Visual robot that has no incorprated phyics but just act as a visual aid to display the ideal towr generated trajectories.
+* The *Grey Robot* is the real physical robot model (with mass and inertia) in which the computed joint angles (corresponding to the towr trajectory) are applied.
+* In the above simulation, **TOWR trajectories where recomputed until the real robot(grey) reaches the desired target taking the current position and orientation of the real robot as initial state**.
+* The above results are pure **position control**, and the feet contact force given out by TOWR has not been utilized yet.
 * From our experiments it is clearly visible(from the failures of the grey robot) that the TOWR trajectories are not directly deployable in a robot and requires a control strategy that could bridge the reality gap.
 
 
@@ -41,7 +41,7 @@ the usage additional ROS packages.This is quite cumbersome and not very straight
 
 * Building the other terrain models like block, chimney, Gap, Slope, Chimney, ChimneyLR, as physical bodies with realistic material properties. However, yoo can still visualize the trajectory but not simulate it.
 
-* Adding support for other robots and feature to import user defined robots.
+* Adding support for other robots and feature to import user defined robots amd implment a **whole body controller** to realize torque control.
 
 * Implementation of a class of controllers, that could actively track these generated trajectories.
 
