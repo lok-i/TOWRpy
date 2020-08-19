@@ -19,9 +19,9 @@ the usage additional ROS packages.This is quite cumbersome and not very straight
 ## Current Features:
 
 <p align="center">
-   <img width="280" height="300" src="https://github.com/lok-i/towr_pybullet/blob/master/media/stairs.gif">
-   <img width="280" height="300" src="https://github.com/lok-i/towr_pybullet/blob/master/media/turn.gif">
-   <img width="280" height="300" src="https://github.com/lok-i/towr_pybullet/blob/master/media/trot.gif">
+   <img width="250" height="280" src="https://github.com/lok-i/towr_pybullet/blob/master/media/stairs.gif">
+   <img width="250" height="280" src="https://github.com/lok-i/towr_pybullet/blob/master/media/turn.gif">
+   <img width="250" height="280" src="https://github.com/lok-i/towr_pybullet/blob/master/media/trot.gif">
     <i>Climbing Stairs(left), Turning about the axis(centre), Trotting to a given target(right) </i><br>
 </p>
 
